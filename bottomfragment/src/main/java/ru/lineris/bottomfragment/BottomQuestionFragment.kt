@@ -1,26 +1,30 @@
 package ru.lineris.bottomfragment
 
-import android.content.Context
+import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 const val ARG_HEADER = "messageHeader"
 const val ARG_MESSAGE = "messageText"
-const val ARG_BUTTON = "buttonText"
+const val ARG_QR = "qrCode"
 const val ARG_POSITIVE_BUTTON = "buttonYesText"
 const val ARG_NEGATIVE_BUTTON = "buttonNoText"
-const val ARG_ICON_RES = "iconRes"
 
 
 class BottomQuestionFragment : BottomSheetDialogFragment() {
     private lateinit var positiveAction: () -> Unit
     private lateinit var negativeAction: () -> Unit
+    private lateinit var dismissAction: () -> Unit
+    private lateinit var onShowAction: () -> Unit
 
     fun setPositiveAction(action: () -> Unit): BottomQuestionFragment {
         positiveAction = action
@@ -32,6 +36,16 @@ class BottomQuestionFragment : BottomSheetDialogFragment() {
         return this
     }
 
+    fun setDismissAction(action: () -> Unit): BottomQuestionFragment {
+        dismissAction = action
+        return this
+    }
+
+    fun setOnShowAction(action: () -> Unit): BottomQuestionFragment {
+        onShowAction = action
+        return this
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,13 +53,26 @@ class BottomQuestionFragment : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.fragment_bottom_question, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.setOnShowListener { dialog ->
+            if (::onShowAction.isInitialized)
+                onShowAction()
+            val d = dialog as BottomSheetDialog
+            val bottomSheet: View? =
+                d.findViewById(com.google.android.material.R.id.design_bottom_sheet)
+            if (bottomSheet != null)
+                BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED
+        }
+        return dialog
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val textHeader: TextView = view.findViewById(R.id.textHeader)
         val textView: TextView = view.findViewById(R.id.textView)
         val buttonYes: AppCompatButton = view.findViewById(R.id.buttonYes)
         val buttonNo: AppCompatButton = view.findViewById(R.id.buttonNo)
-        val icon: ImageView = view.findViewById(R.id.icon)
+        val qrCodeView: AppCompatImageView = view.findViewById(R.id.qrImageView)
 
         val head = arguments?.getString(ARG_HEADER)
         if (head.isNullOrEmpty()) {
@@ -57,7 +84,6 @@ class BottomQuestionFragment : BottomSheetDialogFragment() {
 
         val textYes = arguments?.getString(ARG_POSITIVE_BUTTON)
         val textNo = arguments?.getString(ARG_NEGATIVE_BUTTON)
-        val iconRes = arguments?.getInt(ARG_ICON_RES)
 
         textView.text = arguments?.getString(ARG_MESSAGE)
         if (textYes?.isNotEmpty() == true) {
@@ -70,12 +96,14 @@ class BottomQuestionFragment : BottomSheetDialogFragment() {
             buttonNo.visibility = View.VISIBLE
         } else
             buttonNo.visibility = View.GONE
-        if (iconRes != null) {
-            icon.setImageResource(iconRes)
-            icon.visibility = View.VISIBLE
-        } else
-            icon.visibility = View.GONE
 
+        val qr = arguments?.getString(ARG_QR)
+        if (qr.isNullOrEmpty()) {
+            qrCodeView.visibility = View.GONE
+        } else {
+            qrCodeView.setImageBitmap(QRHelper.buildQRcode(qr))
+            qrCodeView.visibility = View.VISIBLE
+        }
 
         buttonYes.setOnClickListener {
             //parentFragment?.childFragmentManager?.beginTransaction()?.remove(this)?.commit()
@@ -92,31 +120,26 @@ class BottomQuestionFragment : BottomSheetDialogFragment() {
         }
     }
 
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onDismiss(dialog: DialogInterface) {
+        if (::dismissAction.isInitialized)
+            dismissAction()
+        super.onDismiss(dialog)
     }
-
-    override fun onDetach() {
-        super.onDetach()
-    }
-
-
 
     companion object {
         fun newInstance(messageHeader: String,
                         messageText: String,
                         buttonPositiveText: String,
                         buttonNegativeText: String,
-                        icon: Int? = null): BottomQuestionFragment =
+                        qrCode: String? = null): BottomQuestionFragment =
             BottomQuestionFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_HEADER, messageHeader)
                     putString(ARG_MESSAGE, messageText)
                     putString(ARG_POSITIVE_BUTTON, buttonPositiveText)
                     putString(ARG_NEGATIVE_BUTTON, buttonNegativeText)
-                    if (icon != null)
-                        putInt(ARG_ICON_RES, icon)
+                    if (!qrCode.isNullOrEmpty())
+                        putString(ARG_QR, qrCode)
                 }
             }
 
