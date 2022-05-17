@@ -16,6 +16,7 @@
         android:background="@drawable/button_rounded"
         android:backgroundTint="@color/colorAction"
         android:padding="8dp"
+        android:textColor="@color/buttonWhite"
         app:layout_constraintBottom_toTopOf="@+id/buttonNo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -29,6 +30,7 @@
         android:background="@drawable/button_rounded"
         android:backgroundTint="@color/buttonNegative"
         android:padding="8dp"
+        android:textColor="@color/buttonWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

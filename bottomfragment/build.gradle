@@ -9,8 +9,6 @@ task androidSourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 
-//  https://medium.com/geekculture/publish-your-android-library-on-jitpack-for-better-reachability-1c978dde726e
-
 android {
     compileSdk 32
 
@@ -62,7 +60,7 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'ru.lineris'
                 artifactId = 'bottomfragment'
-                version = '0.04'
+                version = '0.05'
             }
         }
     }

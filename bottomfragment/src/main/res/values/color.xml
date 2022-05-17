@@ -11,4 +11,5 @@
     <item name="colorAction" type="color">#388E3C</item>
     <item name="buttonNegative" type="color">#D32F2F</item>
 
+    <item name="buttonWhite" type="color">#FFFFFF</item>
 </resources>
