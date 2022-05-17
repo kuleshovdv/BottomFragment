@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorMain">#9C27B0</color>
+    <color name="colorAccent">#e2f948</color>
+    <color name="colorDisabled">#777777</color>
+    <item name="buttonEnable" type="color">#ff7800</item>
+
+    <item name="green" type="color">#8BC34A</item>
+    <item name="colorAction" type="color">#388E3C</item>
+    <item name="buttonNegative" type="color">#D32F2F</item>
+
+</resources>
