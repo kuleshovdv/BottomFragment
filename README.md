@@ -1,15 +1,34 @@
 # BottomQuestionFragment
 
-Simple and convenient extention of the **BottomSheetDialogFragment **class for dialogs.
+Simple and convenient extention of the BottomSheetDialogFragment class for dialogs.
 Use newinstance pattern you can build dialogs with:
 1. Title
 2. TextView body
 3. QR code ImageView
 4. Button for positive user reaction
 5. Button for negative user reaction
-6. Lamda functions for show/dismiss dialog, positice/negative action.
+6. Lamda functions for show/dismiss dialog, positive/negative action.
 
-Example:
+Like this
+![BottomQuestionFragment](https://github.com/kuleshovdv/BottomFragment/raw/master/screen.png  "BottomQuestionFragment")
+
+Add it in your root build.gradle at the end of repositories:
+```
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+Add the dependency
+```
+	dependencies {
+		implementation 'com.github.kuleshovdv:BottomFragment:0.05'
+	}
+```
+
+Example
 ```
         BottomQuestionFragment.newInstance(
             "Hello!",
@@ -36,4 +55,7 @@ Example:
             .show(supportFragmentManager, "test")
 ```
 
-![BottomQuestionFragment](https://github.com/kuleshovdv/BottomFragment/raw/master/screen.png  "BottomQuestionFragment")
+If you need to start dialog from fragment
+```
+	.show(childFragmentManager, "test")
+```	
