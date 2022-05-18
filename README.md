@@ -1,4 +1,4 @@
-# BottomFragment
+# BottomQuestionFragment
 
 Simple and convenient extention of the **BottomSheetDialogFragment **class for dialogs.
 Use newinstance pattern you can build dialogs with:
@@ -35,3 +35,5 @@ Example:
             }
             .show(supportFragmentManager, "test")
 ```
+
+![BottomQuestionFragment](https://github.com/kuleshovdv/BottomFragment/raw/master/screen.png  "BottomQuestionFragment")
