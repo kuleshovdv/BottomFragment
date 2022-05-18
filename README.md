@@ -10,6 +10,7 @@ Use newinstance pattern you can build dialogs with:
 6. Lamda functions for show/dismiss dialog, positice/negative action.
 
 Example:
+```
         BottomQuestionFragment.newInstance(
             "Hello!",
             "Click the button below",
@@ -33,3 +34,4 @@ Example:
                 binding.lastAction.text = "Last action: NEGATIVE"
             }
             .show(supportFragmentManager, "test")
+```
