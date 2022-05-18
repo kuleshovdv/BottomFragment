@@ -10,6 +10,7 @@ Use newinstance pattern you can build dialogs with:
 6. Lamda functions for show/dismiss dialog, positive/negative action.
 
 Like this
+
 ![BottomQuestionFragment](https://github.com/kuleshovdv/BottomFragment/raw/master/screen.png  "BottomQuestionFragment")
 
 Add it in your root build.gradle at the end of repositories:
