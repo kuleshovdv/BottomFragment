@@ -1,7 +1,7 @@
 # BottomQuestionFragment
 
-Simple and convenient extention of the BottomSheetDialogFragment class for dialogs.
-Use newinstance pattern you can build dialogs with:
+Simple and convenient extention of the BottomSheetDialogFragment class.
+Use newinstance pattern for build dialog with:
 1. Title
 2. TextView body
 3. QR code ImageView
