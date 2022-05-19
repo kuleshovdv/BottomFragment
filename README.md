@@ -56,6 +56,8 @@ Example
             .show(supportFragmentManager, "test")
 ```
 
+See more details in [MainActivity.kt](https://github.com/kuleshovdv/BottomFragment/blob/master/app/src/main/java/ru/lineris/bottomfragmentapp/MainActivity.kt) 
+
 If you need to start dialog from fragment
 ```
 	.show(childFragmentManager, "test")
