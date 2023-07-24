@@ -31,7 +31,8 @@ class MainActivity : AppCompatActivity() {
             "Click the button below",
             "Positive",
             "Negative",
-            "https://github.com/kuleshovdv/BottomFragment")
+            "https://github.com/kuleshovdv/BottomFragment",
+        "ver. ${BuildConfig.VERSION_NAME}")
             .setOnShowAction {
                 Log.d(TAG, "onShowAction")
                 binding.showAgain.visibility = View.GONE

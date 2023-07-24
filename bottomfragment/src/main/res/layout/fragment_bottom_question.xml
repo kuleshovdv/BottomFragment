@@ -49,6 +49,17 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
+        android:id="@+id/techInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="11sp"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:layout_editor_absoluteX="-16dp" />
+
+    <TextView
         android:id="@+id/textHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

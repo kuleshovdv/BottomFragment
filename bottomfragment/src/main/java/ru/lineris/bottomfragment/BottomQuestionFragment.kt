@@ -18,6 +18,7 @@ const val ARG_MESSAGE = "messageText"
 const val ARG_QR = "qrCode"
 const val ARG_POSITIVE_BUTTON = "buttonYesText"
 const val ARG_NEGATIVE_BUTTON = "buttonNoText"
+const val ARG_TECH_INFO = "techInfo"
 
 
 class BottomQuestionFragment : BottomSheetDialogFragment() {
@@ -73,6 +74,7 @@ class BottomQuestionFragment : BottomSheetDialogFragment() {
         val buttonYes: AppCompatButton = view.findViewById(R.id.buttonYes)
         val buttonNo: AppCompatButton = view.findViewById(R.id.buttonNo)
         val qrCodeView: AppCompatImageView = view.findViewById(R.id.qrImageView)
+        val techInfoView: TextView = view.findViewById(R.id.techInfo)
 
         val head = arguments?.getString(ARG_HEADER)
         if (head.isNullOrEmpty()) {
@@ -105,6 +107,14 @@ class BottomQuestionFragment : BottomSheetDialogFragment() {
             qrCodeView.visibility = View.VISIBLE
         }
 
+        val techInfo = arguments?.getString(ARG_TECH_INFO)
+        if (techInfo.isNullOrEmpty()) {
+            techInfoView.visibility = View.GONE
+        } else {
+            techInfoView.text = techInfo
+            techInfoView.visibility = View.VISIBLE
+        }
+
         buttonYes.setOnClickListener {
             //parentFragment?.childFragmentManager?.beginTransaction()?.remove(this)?.commit()
             dismiss()
@@ -131,7 +141,8 @@ class BottomQuestionFragment : BottomSheetDialogFragment() {
                         messageText: String,
                         buttonPositiveText: String,
                         buttonNegativeText: String,
-                        qrCode: String? = null): BottomQuestionFragment =
+                        qrCode: String? = null,
+                        techInfo: String? = null): BottomQuestionFragment =
             BottomQuestionFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_HEADER, messageHeader)
@@ -140,6 +151,8 @@ class BottomQuestionFragment : BottomSheetDialogFragment() {
                     putString(ARG_NEGATIVE_BUTTON, buttonNegativeText)
                     if (!qrCode.isNullOrEmpty())
                         putString(ARG_QR, qrCode)
+                    if (!techInfo.isNullOrEmpty())
+                        putString(ARG_TECH_INFO, techInfo)
                 }
             }
 
