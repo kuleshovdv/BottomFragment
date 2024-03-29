@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "Negative Action")
                 binding.lastAction.text = "Last action: NEGATIVE"
             }
+            .setAlert()
             .show(supportFragmentManager, "test")
     }
 }

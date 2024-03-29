@@ -2,6 +2,9 @@ package ru.lineris.bottomfragment
 
 import android.app.Dialog
 import android.content.DialogInterface
+import android.media.AudioAttributes
+import android.media.AudioFormat
+import android.media.AudioTrack
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +15,12 @@ import androidx.appcompat.widget.AppCompatImageView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.IOException
+
+
+
 
 const val ARG_HEADER = "messageHeader"
 const val ARG_MESSAGE = "messageText"
@@ -26,6 +35,8 @@ class BottomQuestionFragment : BottomSheetDialogFragment() {
     private lateinit var negativeAction: () -> Unit
     private lateinit var dismissAction: () -> Unit
     private lateinit var onShowAction: () -> Unit
+    private var alert: Boolean = false
+    private var alertResourceId = R.raw.alert_sound
 
     fun setPositiveAction(action: () -> Unit): BottomQuestionFragment {
         positiveAction = action
@@ -47,6 +58,12 @@ class BottomQuestionFragment : BottomSheetDialogFragment() {
         return this
     }
 
+    fun setAlert(resourceId: Int = R.raw.alert_sound): BottomQuestionFragment {
+        alert = true
+        alertResourceId = resourceId
+        return this
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,6 +76,8 @@ class BottomQuestionFragment : BottomSheetDialogFragment() {
         dialog.setOnShowListener { dialog ->
             if (::onShowAction.isInitialized)
                 onShowAction()
+            if (alert)
+                playAlert()
             val d = dialog as BottomSheetDialog
             val bottomSheet: View? =
                 d.findViewById(com.google.android.material.R.id.design_bottom_sheet)
@@ -134,6 +153,41 @@ class BottomQuestionFragment : BottomSheetDialogFragment() {
         if (::dismissAction.isInitialized)
             dismissAction()
         super.onDismiss(dialog)
+    }
+
+    private fun playAlert() {
+        val minBufSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_MONO,
+            AudioFormat.ENCODING_PCM_16BIT);
+        val audioTrack = AudioTrack.Builder()
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build()
+            )
+            .setAudioFormat(
+                AudioFormat.Builder()
+                    .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                    .setSampleRate(44100)
+                    .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                    .build()
+            )
+            .setBufferSizeInBytes(minBufSize)
+            .build()
+
+        GlobalScope.launch {
+            val inputStream = resources.openRawResource(alertResourceId)
+            val byteData = ByteArray(1024)
+            audioTrack.play()
+            while (true) {
+                val chunkSize = inputStream.read(byteData)
+                if (chunkSize > 0) {
+                    audioTrack.write(byteData, 0, chunkSize)
+                } else
+                    break
+            }
+            audioTrack.release()
+        }
     }
 
     companion object {
